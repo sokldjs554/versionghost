@@ -1,0 +1,8 @@
+{
+  "client_version": "2.0",
+  "description": "A retried claim must not consume an extra daily slot.",
+  "kind": "duplicate_idempotency",
+  "request": {"player_id": "retry20", "event_id": "spring", "idempotency_key": "dup20", "streak_days": 4},
+  "expected_status": 200,
+  "expected_claim_count": 1
+}

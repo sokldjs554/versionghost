@@ -1,0 +1,11 @@
+---
+description: VersionGhost invariants for AI-assisted repository edits
+alwaysApply: true
+---
+
+- Do not edit `sample_app/liveops_service/client_contracts/` to make a code change pass.
+- Do not weaken or delete compatibility checks as a repair strategy.
+- Prefer small, reversible changes and explain which requirement each change satisfies.
+- Run `python -m pytest -q` before completion.
+- Run `python -m versionghost.cli demo` before completion and inspect the merge-packet verdict.
+- Never claim an external model/deployment was used unless a run artifact proves it.

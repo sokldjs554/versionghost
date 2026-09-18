@@ -1,0 +1,9 @@
+{
+  "client_version": "1.9",
+  "description": "Current v1 client still expects the legacy coins field.",
+  "request": {"player_id": "legacy19", "event_id": "spring", "idempotency_key": "v19", "streak_days": 2},
+  "expected_status": 200,
+  "required_keys": ["claim_id", "coins"],
+  "forbidden_keys": ["base_coins", "streak_bonus", "total_coins"],
+  "exact_values": {"coins": 100}
+}

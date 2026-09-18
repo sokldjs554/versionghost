@@ -1,0 +1,8 @@
+{
+  "client_version": "2.0",
+  "description": "The fourth unique daily claim is a domain conflict, not a rate-limit response.",
+  "kind": "daily_limit",
+  "request": {"player_id": "limit20", "event_id": "spring", "idempotency_key": "limit", "streak_days": 1},
+  "expected_status": 409,
+  "expected_error": "daily_limit_reached"
+}

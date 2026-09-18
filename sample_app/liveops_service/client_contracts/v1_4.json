@@ -1,0 +1,9 @@
+{
+  "client_version": "1.4",
+  "description": "Legacy mobile client accepts only the historical reward payload.",
+  "request": {"player_id": "legacy14", "event_id": "spring", "idempotency_key": "v14", "streak_days": 4},
+  "expected_status": 200,
+  "required_keys": ["claim_id", "coins"],
+  "forbidden_keys": ["base_coins", "streak_bonus", "total_coins"],
+  "exact_values": {"coins": 100}
+}

@@ -1,0 +1,9 @@
+{
+  "client_version": "2.0",
+  "description": "New client expects an explicit breakdown and total.",
+  "request": {"player_id": "new20", "event_id": "spring", "idempotency_key": "v20", "streak_days": 4},
+  "expected_status": 200,
+  "required_keys": ["claim_id", "base_coins", "streak_bonus", "total_coins"],
+  "forbidden_keys": ["coins"],
+  "exact_values": {"base_coins": 100, "streak_bonus": 20, "total_coins": 120}
+}

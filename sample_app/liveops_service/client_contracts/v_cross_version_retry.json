@@ -1,0 +1,12 @@
+{
+  "client_version": "1.9->2.0",
+  "description": "The same idempotency key may be retried after a client upgrade; canonical reward state must render in the requesting version.",
+  "kind": "cross_version_retry",
+  "request": {"player_id": "upgrade", "event_id": "spring", "idempotency_key": "upgrade-key", "streak_days": 4},
+  "first_version": "1.9",
+  "second_version": "2.0",
+  "expected_first_keys": ["claim_id", "coins"],
+  "expected_second_keys": ["claim_id", "base_coins", "streak_bonus", "total_coins"],
+  "expected_total": 120,
+  "expected_claim_count": 1
+}

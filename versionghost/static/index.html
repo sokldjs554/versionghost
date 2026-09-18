@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>VersionGhost — Compatibility before merge</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand"><span class="mark">VG</span><div><strong>VersionGhost</strong><small>evidence-driven compatibility agent</small></div></div>
+      <div class="status"><span class="pulse"></span><span id="serviceStatus">local demo ready</span></div>
+    </header>
+
+    <main>
+      <section class="hero grid two">
+        <div>
+          <p class="eyebrow">AI DEVELOPER PRODUCTIVITY · LIVE-SERVICE SAFETY</p>
+          <h1>Change the API.<br/><span>Replay the clients you cannot update.</span></h1>
+          <p class="lede">VersionGhost turns a feature request into a verifiable change contract, generates a bounded code patch, and replays historical mobile-client contracts before it can call the change ready.</p>
+          <div class="chips"><span>code generation</span><span>historical replay</span><span>repair loop</span><span>open-model route</span></div>
+        </div>
+        <aside class="hero-card">
+          <div class="card-head"><span>Why this exists</span><span class="tag">not a chat demo</span></div>
+          <p>A normal coding agent sees the current repository. A live mobile service still has old clients in the field. VersionGhost keeps those client contracts inside the verification loop.</p>
+          <div class="metric-row"><div><b>3</b><span>client versions</span></div><div><b>6</b><span>contract probes</span></div><div><b>2</b><span>bounded attempts</span></div></div>
+        </aside>
+      </section>
+
+      <section class="panel composer">
+        <div class="panel-title"><div><p class="eyebrow">CHANGE REQUEST</p><h2>Ask for a real behavior change</h2></div><div class="select-wrap"><label>model route</label><select id="provider"><option value="deterministic-demo">Deterministic demo</option><option value="ollama">Ollama / OpenAI-compatible</option><option value="anthropic">Anthropic API</option></select></div></div>
+        <textarea id="requestText" spellcheck="false"></textarea>
+        <div class="actions"><button id="loadDemo" class="secondary">Reset scenario</button><button id="runBtn">Run compatibility pipeline <span>→</span></button></div>
+      </section>
+
+      <section id="runArea" class="hidden">
+        <div class="run-header"><div><p class="eyebrow">RUN <span id="runId"></span></p><h2 id="runStatus">Queued</h2></div><div id="verdict" class="verdict neutral">working</div></div>
+
+        <div class="stage-track" id="stageTrack"></div>
+
+        <div class="grid two result-grid">
+          <section class="panel">
+            <div class="panel-title compact"><div><p class="eyebrow">COMPATIBILITY MATRIX</p><h3>Historical client replay</h3></div><span id="replayCount" class="tag">waiting</span></div>
+            <div id="matrix" class="matrix empty">The matrix appears after the first verification pass.</div>
+          </section>
+          <section class="panel">
+            <div class="panel-title compact"><div><p class="eyebrow">AGENT LOOP</p><h3>Attempt → evidence → repair</h3></div></div>
+            <div id="attempts" class="attempts"><div class="empty-note">No attempt yet.</div></div>
+          </section>
+        </div>
+
+        <section class="panel">
+          <div class="panel-title compact"><div><p class="eyebrow">CHANGE CONTRACT</p><h3>Requirement-to-evidence ledger</h3></div><span class="tag">model cannot edit this verification surface</span></div>
+          <div id="requirements" class="requirements"><div class="empty-note">Compiling contract…</div></div>
+        </section>
+
+        <div class="grid two result-grid">
+          <section class="panel">
+            <div class="panel-title compact"><div><p class="eyebrow">BLAST RADIUS</p><h3>Static impact map</h3></div></div>
+            <div id="impact" class="impact"><div class="empty-note">Analyzing repository…</div></div>
+          </section>
+          <section class="panel">
+            <div class="panel-title compact"><div><p class="eyebrow">MERGE PACKET</p><h3>What can actually be claimed</h3></div></div>
+            <div id="packetMeta" class="packet-meta"><div class="empty-note">No packet yet.</div></div>
+          </section>
+        </div>
+
+        <section class="panel event-panel">
+          <div class="panel-title compact"><div><p class="eyebrow">PIPELINE TRACE</p><h3>Every transition is persisted</h3></div></div>
+          <div id="events" class="events"></div>
+        </section>
+      </section>
+    </main>
+    <footer>Synthetic demo data only · no production client traffic · VersionGhost v0.1</footer>
+  </div>
+  <script src="/static/app.js"></script>
+</body>
+</html>

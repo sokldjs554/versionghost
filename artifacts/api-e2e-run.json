@@ -1,0 +1,490 @@
+{
+  "id": "c819035ce021",
+  "request_text": "Add a streak bonus for v2 mobile clients. v2 must receive base_coins, streak_bonus, and total_coins. Keep v1.4/v1.9 response compatibility, preserve idempotent retries, keep the three-claim daily limit as HTTP 409, and make a retry safe even if the client upgrades from v1 to v2 between attempts.",
+  "scenario": "streak-bonus-compatibility",
+  "provider": "deterministic-demo",
+  "stage": "complete",
+  "status_message": "Ready with evidence",
+  "created_at": "2026-09-18T11:20:44.361055+00:00",
+  "updated_at": "2026-09-18T11:20:49.509243+00:00",
+  "packet": {
+    "run_id": "c819035ce021",
+    "verdict": "ready_with_evidence",
+    "contract": {
+      "title": "Versioned streak bonus without breaking v1 clients",
+      "intent": "Add a streak bonus for v2 mobile clients. v2 must receive base_coins, streak_bonus, and total_coins. Keep v1.4/v1.9 response compatibility, preserve idempotent retries, keep the three-claim daily limit as HTTP 409, and make a retry safe even if the client upgrades from v1 to v2 between attempts.",
+      "requirements": [
+        {
+          "id": "REQ-1",
+          "text": "v2 clients receive base_coins, streak_bonus, and total_coins.",
+          "kind": "behavior",
+          "verification": "Replay v2.0 historical contract fixture."
+        },
+        {
+          "id": "REQ-2",
+          "text": "v1.4 and v1.9 clients keep the exact legacy coins response contract.",
+          "kind": "compatibility",
+          "verification": "Replay v1.4 and v1.9 fixtures and reject new v2-only fields."
+        },
+        {
+          "id": "REQ-3",
+          "text": "Retries with the same idempotency key never consume another daily claim slot.",
+          "kind": "invariant",
+          "verification": "Replay duplicate-idempotency probe and inspect stored claim count."
+        },
+        {
+          "id": "REQ-4",
+          "text": "The fourth unique claim stays a 409 daily_limit_reached domain conflict.",
+          "kind": "error_contract",
+          "verification": "Replay daily-limit boundary probe."
+        },
+        {
+          "id": "REQ-5",
+          "text": "A retry crossing from a v1 client to a v2 client renders the same canonical reward in the new response shape.",
+          "kind": "compatibility",
+          "verification": "Replay cross-version retry probe with one idempotency key."
+        }
+      ],
+      "protected_clients": [
+        "1.4",
+        "1.9",
+        "2.0"
+      ],
+      "assumptions": [
+        "Client major version is supplied by X-Client-Version.",
+        "All demo traffic and player identifiers are synthetic.",
+        "The daily limit remains three unique successful claims per player."
+      ]
+    },
+    "impact": {
+      "nodes": [
+        {
+          "id": "file:sample_app/liveops_service/__init__.py",
+          "kind": "file",
+          "path": "sample_app/liveops_service/__init__.py",
+          "symbol": null
+        },
+        {
+          "id": "file:sample_app/liveops_service/api.py",
+          "kind": "file",
+          "path": "sample_app/liveops_service/api.py",
+          "symbol": null
+        },
+        {
+          "id": "symbol:sample_app/liveops_service/api.py:ClaimBody",
+          "kind": "class",
+          "path": "sample_app/liveops_service/api.py",
+          "symbol": "ClaimBody"
+        },
+        {
+          "id": "symbol:sample_app/liveops_service/api.py:claim",
+          "kind": "function",
+          "path": "sample_app/liveops_service/api.py",
+          "symbol": "claim"
+        },
+        {
+          "id": "file:sample_app/liveops_service/service.py",
+          "kind": "file",
+          "path": "sample_app/liveops_service/service.py",
+          "symbol": null
+        },
+        {
+          "id": "symbol:sample_app/liveops_service/service.py:ClaimRequest",
+          "kind": "class",
+          "path": "sample_app/liveops_service/service.py",
+          "symbol": "ClaimRequest"
+        },
+        {
+          "id": "symbol:sample_app/liveops_service/service.py:claim_reward",
+          "kind": "function",
+          "path": "sample_app/liveops_service/service.py",
+          "symbol": "claim_reward"
+        },
+        {
+          "id": "file:sample_app/liveops_service/state.py",
+          "kind": "file",
+          "path": "sample_app/liveops_service/state.py",
+          "symbol": null
+        },
+        {
+          "id": "symbol:sample_app/liveops_service/state.py:RewardState",
+          "kind": "class",
+          "path": "sample_app/liveops_service/state.py",
+          "symbol": "RewardState"
+        },
+        {
+          "id": "symbol:sample_app/liveops_service/state.py:reset",
+          "kind": "function",
+          "path": "sample_app/liveops_service/state.py",
+          "symbol": "reset"
+        },
+        {
+          "id": "file:sample_app/liveops_service/tests/test_service.py",
+          "kind": "file",
+          "path": "sample_app/liveops_service/tests/test_service.py",
+          "symbol": null
+        },
+        {
+          "id": "symbol:sample_app/liveops_service/tests/test_service.py:setup_function",
+          "kind": "function",
+          "path": "sample_app/liveops_service/tests/test_service.py",
+          "symbol": "setup_function"
+        },
+        {
+          "id": "symbol:sample_app/liveops_service/tests/test_service.py:test_idempotent_duplicate_returns_same_claim",
+          "kind": "function",
+          "path": "sample_app/liveops_service/tests/test_service.py",
+          "symbol": "test_idempotent_duplicate_returns_same_claim"
+        },
+        {
+          "id": "symbol:sample_app/liveops_service/tests/test_service.py:test_fourth_unique_claim_is_rejected",
+          "kind": "function",
+          "path": "sample_app/liveops_service/tests/test_service.py",
+          "symbol": "test_fourth_unique_claim_is_rejected"
+        }
+      ],
+      "edges": [
+        {
+          "source": "file:sample_app/liveops_service/api.py",
+          "target": "symbol:sample_app/liveops_service/api.py:ClaimBody",
+          "relation": "contains"
+        },
+        {
+          "source": "file:sample_app/liveops_service/api.py",
+          "target": "symbol:sample_app/liveops_service/api.py:claim",
+          "relation": "contains"
+        },
+        {
+          "source": "file:sample_app/liveops_service/service.py",
+          "target": "symbol:sample_app/liveops_service/service.py:ClaimRequest",
+          "relation": "contains"
+        },
+        {
+          "source": "file:sample_app/liveops_service/service.py",
+          "target": "symbol:sample_app/liveops_service/service.py:claim_reward",
+          "relation": "contains"
+        },
+        {
+          "source": "file:sample_app/liveops_service/state.py",
+          "target": "symbol:sample_app/liveops_service/state.py:RewardState",
+          "relation": "contains"
+        },
+        {
+          "source": "file:sample_app/liveops_service/state.py",
+          "target": "symbol:sample_app/liveops_service/state.py:reset",
+          "relation": "contains"
+        },
+        {
+          "source": "file:sample_app/liveops_service/tests/test_service.py",
+          "target": "symbol:sample_app/liveops_service/tests/test_service.py:setup_function",
+          "relation": "contains"
+        },
+        {
+          "source": "file:sample_app/liveops_service/tests/test_service.py",
+          "target": "symbol:sample_app/liveops_service/tests/test_service.py:test_idempotent_duplicate_returns_same_claim",
+          "relation": "contains"
+        },
+        {
+          "source": "file:sample_app/liveops_service/tests/test_service.py",
+          "target": "symbol:sample_app/liveops_service/tests/test_service.py:test_fourth_unique_claim_is_rejected",
+          "relation": "contains"
+        },
+        {
+          "source": "file:sample_app/liveops_service/api.py",
+          "target": "symbol:sample_app/liveops_service/service.py:claim_reward",
+          "relation": "calls"
+        },
+        {
+          "source": "file:sample_app/liveops_service/api.py",
+          "target": "symbol:sample_app/liveops_service/service.py:ClaimRequest",
+          "relation": "calls"
+        },
+        {
+          "source": "file:sample_app/liveops_service/state.py",
+          "target": "symbol:sample_app/liveops_service/state.py:RewardState",
+          "relation": "calls"
+        },
+        {
+          "source": "file:sample_app/liveops_service/tests/test_service.py",
+          "target": "symbol:sample_app/liveops_service/state.py:reset",
+          "relation": "calls"
+        },
+        {
+          "source": "file:sample_app/liveops_service/tests/test_service.py",
+          "target": "symbol:sample_app/liveops_service/service.py:ClaimRequest",
+          "relation": "calls"
+        },
+        {
+          "source": "file:sample_app/liveops_service/tests/test_service.py",
+          "target": "symbol:sample_app/liveops_service/service.py:claim_reward",
+          "relation": "calls"
+        },
+        {
+          "source": "file:sample_app/liveops_service/tests/test_service.py",
+          "target": "symbol:sample_app/liveops_service/service.py:claim_reward",
+          "relation": "calls"
+        },
+        {
+          "source": "file:sample_app/liveops_service/tests/test_service.py",
+          "target": "symbol:sample_app/liveops_service/service.py:claim_reward",
+          "relation": "calls"
+        },
+        {
+          "source": "file:sample_app/liveops_service/tests/test_service.py",
+          "target": "symbol:sample_app/liveops_service/service.py:claim_reward",
+          "relation": "calls"
+        },
+        {
+          "source": "file:sample_app/liveops_service/tests/test_service.py",
+          "target": "symbol:sample_app/liveops_service/service.py:ClaimRequest",
+          "relation": "calls"
+        },
+        {
+          "source": "file:sample_app/liveops_service/tests/test_service.py",
+          "target": "symbol:sample_app/liveops_service/service.py:ClaimRequest",
+          "relation": "calls"
+        }
+      ],
+      "touched_candidates": [
+        "sample_app/liveops_service/service.py",
+        "sample_app/liveops_service/api.py",
+        "sample_app/liveops_service/tests/test_service.py",
+        "sample_app/liveops_service/__init__.py",
+        "sample_app/liveops_service/state.py"
+      ],
+      "uncertainty": []
+    },
+    "attempts": [
+      {
+        "attempt": 1,
+        "patch_summary": "Add a version parameter and streak-bonus response shape.",
+        "changed_files": [
+          "sample_app/liveops_service/api.py",
+          "sample_app/liveops_service/service.py"
+        ],
+        "checks": [
+          {
+            "name": "compile-check",
+            "status": "pass",
+            "detail": "Python source compiled successfully.",
+            "duration_ms": 656
+          },
+          {
+            "name": "target-unit-tests",
+            "status": "pass",
+            "detail": "..                                                                       [100%]",
+            "duration_ms": 1771
+          },
+          {
+            "name": "historical-client-replay",
+            "status": "fail",
+            "detail": "3/6 compatibility probes passed.",
+            "duration_ms": 24
+          }
+        ],
+        "replay": [
+          {
+            "client_version": "1.4",
+            "case_id": "Legacy mobile client accepts only the historical reward payload.",
+            "status": "fail",
+            "detail": "missing key coins; unexpected key base_coins; unexpected key streak_bonus; unexpected key total_coins; coins=None != 100"
+          },
+          {
+            "client_version": "1.9",
+            "case_id": "Current v1 client still expects the legacy coins field.",
+            "status": "fail",
+            "detail": "missing key coins; unexpected key base_coins; unexpected key streak_bonus; unexpected key total_coins; coins=None != 100"
+          },
+          {
+            "client_version": "2.0",
+            "case_id": "New client expects an explicit breakdown and total.",
+            "status": "pass",
+            "detail": "Response contract matched."
+          },
+          {
+            "client_version": "2.0",
+            "case_id": "A retried claim must not consume an extra daily slot.",
+            "status": "pass",
+            "detail": "Idempotent retry preserved one claim slot."
+          },
+          {
+            "client_version": "2.0",
+            "case_id": "The fourth unique daily claim is a domain conflict, not a rate-limit response.",
+            "status": "pass",
+            "detail": "Daily-limit boundary remained a 409 domain conflict."
+          },
+          {
+            "client_version": "1.9->2.0",
+            "case_id": "The same idempotency key may be retried after a client upgrade; canonical reward state must render in the requesting version.",
+            "status": "fail",
+            "detail": "first response did not match v1 key set"
+          }
+        ],
+        "passed": false
+      },
+      {
+        "attempt": 2,
+        "patch_summary": "Separate canonical reward state from version-specific response rendering.",
+        "changed_files": [
+          "sample_app/liveops_service/service.py"
+        ],
+        "checks": [
+          {
+            "name": "compile-check",
+            "status": "pass",
+            "detail": "Python source compiled successfully.",
+            "duration_ms": 690
+          },
+          {
+            "name": "target-unit-tests",
+            "status": "pass",
+            "detail": "..                                                                       [100%]",
+            "duration_ms": 1963
+          },
+          {
+            "name": "historical-client-replay",
+            "status": "pass",
+            "detail": "6/6 compatibility probes passed.",
+            "duration_ms": 27
+          }
+        ],
+        "replay": [
+          {
+            "client_version": "1.4",
+            "case_id": "Legacy mobile client accepts only the historical reward payload.",
+            "status": "pass",
+            "detail": "Response contract matched."
+          },
+          {
+            "client_version": "1.9",
+            "case_id": "Current v1 client still expects the legacy coins field.",
+            "status": "pass",
+            "detail": "Response contract matched."
+          },
+          {
+            "client_version": "2.0",
+            "case_id": "New client expects an explicit breakdown and total.",
+            "status": "pass",
+            "detail": "Response contract matched."
+          },
+          {
+            "client_version": "2.0",
+            "case_id": "A retried claim must not consume an extra daily slot.",
+            "status": "pass",
+            "detail": "Idempotent retry preserved one claim slot."
+          },
+          {
+            "client_version": "2.0",
+            "case_id": "The fourth unique daily claim is a domain conflict, not a rate-limit response.",
+            "status": "pass",
+            "detail": "Daily-limit boundary remained a 409 domain conflict."
+          },
+          {
+            "client_version": "1.9->2.0",
+            "case_id": "The same idempotency key may be retried after a client upgrade; canonical reward state must render in the requesting version.",
+            "status": "pass",
+            "detail": "One canonical reward re-rendered correctly after the client-version change."
+          }
+        ],
+        "passed": true
+      }
+    ],
+    "requirement_evidence": [
+      {
+        "requirement_id": "REQ-1",
+        "status": "proven",
+        "evidence": [
+          "client 2.0: New client expects an explicit breakdown and total. -> pass"
+        ]
+      },
+      {
+        "requirement_id": "REQ-2",
+        "status": "proven",
+        "evidence": [
+          "client 1.4: Legacy mobile client accepts only the historical reward payload. -> pass",
+          "client 1.9: Current v1 client still expects the legacy coins field. -> pass"
+        ]
+      },
+      {
+        "requirement_id": "REQ-3",
+        "status": "proven",
+        "evidence": [
+          "client 2.0: A retried claim must not consume an extra daily slot. -> pass",
+          "target-unit-tests -> pass"
+        ]
+      },
+      {
+        "requirement_id": "REQ-4",
+        "status": "proven",
+        "evidence": [
+          "client 2.0: The fourth unique daily claim is a domain conflict, not a rate-limit response. -> pass",
+          "target-unit-tests -> pass"
+        ]
+      },
+      {
+        "requirement_id": "REQ-5",
+        "status": "proven",
+        "evidence": [
+          "client 1.9->2.0: The same idempotency key may be retried after a client upgrade; canonical reward state must render in the requesting version. -> pass"
+        ]
+      }
+    ],
+    "changed_files": [
+      "sample_app/liveops_service/api.py",
+      "sample_app/liveops_service/service.py"
+    ],
+    "limitations": [
+      "The default provider is deterministic and exists to reproduce the orchestration path; it is not an LLM quality benchmark.",
+      "Historical clients are synthetic contract fixtures, not production traffic captures.",
+      "Only Python AST impact analysis is implemented in v0.1; dynamic/reflection edges may be missed.",
+      "The model may propose text replacements only; it cannot execute arbitrary shell commands or edit verification fixtures."
+    ],
+    "model_route": "deterministic-demo",
+    "metrics": {
+      "pipeline_ms": 5143,
+      "attempt_count": 2,
+      "impact_nodes": 14,
+      "impact_edges": 20,
+      "replay_probes": 6,
+      "final_replay_passes": 6
+    }
+  },
+  "events": [
+    {
+      "at": "2026-09-18T11:20:44.363087+00:00",
+      "stage": "analyzing",
+      "message": "Building code/contract impact map"
+    },
+    {
+      "at": "2026-09-18T11:20:44.368360+00:00",
+      "stage": "contracting",
+      "message": "Compiling the change request into verifiable requirements"
+    },
+    {
+      "at": "2026-09-18T11:20:44.368852+00:00",
+      "stage": "patching",
+      "message": "Generating a constrained first patch"
+    },
+    {
+      "at": "2026-09-18T11:20:44.369843+00:00",
+      "stage": "verifying",
+      "message": "Running unit checks and historical-client replay matrix"
+    },
+    {
+      "at": "2026-09-18T11:20:46.823414+00:00",
+      "stage": "repairing",
+      "message": "Compatibility evidence rejected the first patch; generating a bounded repair",
+      "failure_summary": "3/6 compatibility probes passed. | 1.4: missing key coins; unexpected key base_coins; unexpected key streak_bonus; unexpected key total_coins; coins=None != 100 | 1.9: missing key coins; unexpected key base_coins; unexpected key streak_bonus; unexpected key total_coins; coins=None != 100 | 1.9->2.0: first response did not match v1 key set"
+    },
+    {
+      "at": "2026-09-18T11:20:46.824240+00:00",
+      "stage": "verifying",
+      "message": "Re-running the same verification surface after repair"
+    },
+    {
+      "at": "2026-09-18T11:20:49.509224+00:00",
+      "stage": "complete",
+      "message": "Verdict: ready_with_evidence"
+    }
+  ]
+}

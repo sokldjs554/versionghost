@@ -1,0 +1,59 @@
+{
+  "evaluation": "deterministic-demo-orchestration",
+  "runs": [
+    {
+      "run": 1,
+      "verdict": "ready_with_evidence",
+      "attempts": 2,
+      "first_replay_passes": 3,
+      "first_replay_total": 6,
+      "final_replay_passes": 6,
+      "final_replay_total": 6,
+      "requirements_proven": 5,
+      "requirements_total": 5,
+      "pipeline_ms": 4584
+    },
+    {
+      "run": 2,
+      "verdict": "ready_with_evidence",
+      "attempts": 2,
+      "first_replay_passes": 3,
+      "first_replay_total": 6,
+      "final_replay_passes": 6,
+      "final_replay_total": 6,
+      "requirements_proven": 5,
+      "requirements_total": 5,
+      "pipeline_ms": 4662
+    },
+    {
+      "run": 3,
+      "verdict": "ready_with_evidence",
+      "attempts": 2,
+      "first_replay_passes": 3,
+      "first_replay_total": 6,
+      "final_replay_passes": 6,
+      "final_replay_total": 6,
+      "requirements_proven": 5,
+      "requirements_total": 5,
+      "pipeline_ms": 4552
+    }
+  ],
+  "summary": {
+    "ready_runs": 3,
+    "total_runs": 3,
+    "first_attempt_replay_passes": 3,
+    "first_attempt_replay_total": 6,
+    "final_replay_passes": 6,
+    "final_replay_total": 6,
+    "requirements_proven": 5,
+    "requirements_total": 5,
+    "median_pipeline_ms": 4584,
+    "min_pipeline_ms": 4552,
+    "max_pipeline_ms": 4662
+  },
+  "limitations": [
+    "This evaluates deterministic orchestration/gates, not LLM coding quality.",
+    "Client contracts and traffic are synthetic.",
+    "Pipeline time is a local evaluation measurement, not production latency."
+  ]
+}
