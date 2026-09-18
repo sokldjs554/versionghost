@@ -3,7 +3,6 @@ from pathlib import Path
 from versionghost.engine.pipeline import VersionGhostPipeline
 from versionghost.store import RunStore
 
-
 REQUEST = (
     "Add a streak bonus for v2 mobile clients while preserving v1.4/v1.9 response compatibility, "
     "idempotent retries, the three-claim daily limit, and cross-version retries."
