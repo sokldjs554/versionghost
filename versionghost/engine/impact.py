@@ -6,7 +6,6 @@ from pathlib import Path
 
 from versionghost.models import ImpactEdge, ImpactNode, ImpactReport
 
-
 INTEREST_TERMS = {
     "reward",
     "claim",
@@ -64,8 +63,8 @@ def analyze_repo(repo_root: Path, request_text: str) -> ImpactReport:
     scored: list[tuple[int, str]] = []
     for path in py_files:
         rel = path.relative_to(repo_root).as_posix()
-        text = path.read_text(encoding="utf-8", errors="ignore").lower()
-        score = sum(1 for term in query_terms if term in text or term in rel.lower())
+        text_content = path.read_text(encoding="utf-8", errors="ignore").lower()
+        score = sum(1 for term in query_terms if term in text_content or term in rel.lower())
         if score:
             scored.append((score, rel))
 
