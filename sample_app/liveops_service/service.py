@@ -5,7 +5,6 @@ from uuid import uuid4
 
 from .state import STATE
 
-
 DAILY_LIMIT = 3
 BASE_COINS = 100
 
