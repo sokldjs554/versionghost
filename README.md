@@ -2,6 +2,12 @@
 
 > **An AI compatibility agent that changes a live-service API only after replaying the historical mobile clients that still depend on it.**
 
+[![ci](https://github.com/sokldjs554/versionghost/actions/workflows/ci.yml/badge.svg)](https://github.com/sokldjs554/versionghost/actions/workflows/ci.yml)
+[![live smoke](https://github.com/sokldjs554/versionghost/actions/workflows/live-smoke.yml/badge.svg)](https://github.com/sokldjs554/versionghost/actions/workflows/live-smoke.yml)
+
+**Live Demo:** https://versionghost.onrender.com  
+**Repository:** https://github.com/sokldjs554/versionghost
+
 VersionGhost is a developer-productivity project built for a public AI Programmer job description centered on LLM services, full-stack delivery, code generation, and workflow automation.
 
 A normal coding agent looks at today's repository. A mobile live service can still have yesterday's app versions calling tomorrow's backend. VersionGhost turns those old clients into an independent verification surface that the code-generation loop cannot edit.
@@ -31,6 +37,12 @@ requirement-to-evidence merge packet
 The built-in synthetic scenario asks for a new v2 streak-bonus response while preserving v1.4/v1.9 clients, idempotent retries, a three-claim daily limit, and a retry that crosses a client upgrade. The first implementation attempt is deliberately plausible but incompatible: v2 works while older clients fail. The repair separates canonical reward state from version-specific rendering and is judged against the exact same replay surface.
 
 ## Demo
+
+Use the deployed product directly:
+
+**https://versionghost.onrender.com**
+
+Or run the same product locally:
 
 ```bash
 python -m pip install -e .
@@ -103,7 +115,7 @@ sample_app/liveops_service/
 └── tests/
 tests/                     # VersionGhost tests
 docs/                      # architecture, research, evaluation, limitations, JD traceability
-scripts/                   # repeatable measured evaluation
+scripts/                   # repeatable measured evaluation + deployed smoke
 ```
 
 ## AI-assisted development integration
@@ -117,7 +129,7 @@ python -m pytest -q
 python scripts/evaluate_demo.py
 ```
 
-Measured on the current local revision:
+Measured on the local evaluation revision:
 
 | Check | Result |
 |---|---:|
@@ -130,11 +142,31 @@ Measured on the current local revision:
 
 The timing is a local orchestration measurement, not production latency. The deterministic route measures the verification/repair design, not model coding quality. Raw results are committed in `artifacts/evaluation.json`.
 
-CI is defined for Python 3.11–3.13 and runs tests, static checks, packaging install, and the keyless end-to-end demo gate.
+CI runs on Python 3.11–3.13 and checks tests, Ruff, mypy, installation, and the keyless end-to-end demo gate.
+
+## Deployed verification
+
+The public Render instance is also checked from a separate GitHub Actions runner. The smoke job waits until `/api/release` reports the exact Git commit being judged, starts a real run through `POST /api/runs`, polls the deployed API, and verifies the resulting merge packet.
+
+Verified deployed run for commit `f1726d5dfdc95faa0a2a6b19c0e14af911ef7e0e`:
+
+| Deployed check | Result |
+|---|---:|
+| Render deployment | **live** |
+| Merge verdict | **ready_with_evidence** |
+| Patch / repair attempts | **2** |
+| Final historical-client replay | **6/6 passed** |
+| Requirement evidence | **5/5 proven** |
+
+The first deployed smoke exposed a real packaging boundary: the service could replay client contracts but its verification worker could not run target tests because `pytest` had been left in the development-only dependency group. The dependency was moved into the runtime verification surface, the service was redeployed, and the same external smoke then passed. That failure is retained in GitHub Actions history rather than hidden.
 
 ## Deployment
 
-A container definition and Render manifest are included. A public URL is intentionally not claimed until the new repository is created, deployed, and smoke-tested.
+The public demo runs on Render from `main` with automatic deploys:
+
+**https://versionghost.onrender.com**
+
+The demo uses ephemeral local storage and synthetic client contracts. It is a portfolio deployment, not a claim of production traffic or production persistence.
 
 ## Research and design docs
 
