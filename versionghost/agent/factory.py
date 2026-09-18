@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from versionghost.agent.base import AgentProvider
 from versionghost.agent.anthropic import AnthropicProvider
+from versionghost.agent.base import AgentProvider
 from versionghost.agent.deterministic import DeterministicDemoProvider
 from versionghost.agent.openai_compat import OpenAICompatibleProvider
 
