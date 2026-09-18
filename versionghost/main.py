@@ -36,6 +36,15 @@ def health() -> dict[str, str]:
     return {"status": "ok", "service": "versionghost", "version": "0.1.0"}
 
 
+@app.get("/api/release")
+def release() -> dict[str, str]:
+    return {
+        "service": "versionghost",
+        "version": "0.1.0",
+        "commit": os.getenv("RENDER_GIT_COMMIT", "unknown"),
+    }
+
+
 @app.post("/api/runs", status_code=202)
 def create_run(body: RunRequest) -> dict[str, str]:
     if body.provider not in {"deterministic-demo", "openai-compatible", "ollama", "anthropic"}:
