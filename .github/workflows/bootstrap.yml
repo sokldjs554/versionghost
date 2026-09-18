@@ -19,11 +19,15 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          cp .github/workflows/bootstrap.yml /tmp/bootstrap.yml
           cat .bootstrap/payload.part* | base64 -d > /tmp/versionghost.tgz
           mkdir -p /tmp/versionghost-src
           tar -xzf /tmp/versionghost.tgz -C /tmp/versionghost-src
           find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
           cp -a /tmp/versionghost-src/. .
+          rm -f .github/workflows/ci.yml
+          mkdir -p .github/workflows
+          cp /tmp/bootstrap.yml .github/workflows/bootstrap.yml
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
