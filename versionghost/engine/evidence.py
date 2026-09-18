@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from versionghost.models import AttemptResult, ChangeContract, RequirementEvidence
 
-
 REQUIREMENT_TO_CASE_SNIPPET = {
     "REQ-1": ["New client expects"],
     "REQ-2": ["Legacy mobile client", "Current v1 client"],
