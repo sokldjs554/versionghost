@@ -5,6 +5,7 @@ import shutil
 import time
 import uuid
 from pathlib import Path
+from typing import Literal
 
 from versionghost.agent.factory import build_provider
 from versionghost.engine.checks import run_compile_check, run_python_tests
@@ -81,7 +82,9 @@ class VersionGhostPipeline:
             evidence = build_requirement_evidence(contract, attempts)
             final_passed = bool(attempts and attempts[-1].passed)
             all_requirements_proven = all(item.status == "proven" for item in evidence)
-            verdict = "ready_with_evidence" if final_passed and all_requirements_proven else "blocked"
+            verdict: Literal["ready_with_evidence", "blocked"] = (
+                "ready_with_evidence" if final_passed and all_requirements_proven else "blocked"
+            )
             elapsed_ms = int((time.perf_counter() - started) * 1000)
 
             packet = MergePacket(
@@ -157,7 +160,7 @@ class VersionGhostPipeline:
         *,
         extra: dict[str, object] | None = None,
     ) -> None:
-        event = {"stage": stage.value, "message": message}
+        event: dict[str, object] = {"stage": stage.value, "message": message}
         if extra:
             event.update(extra)
         self.store.update(run_id, stage=stage, status_message=message, event=event)
