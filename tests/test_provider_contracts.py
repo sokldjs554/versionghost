@@ -22,7 +22,7 @@ class _Client:
         self.payload = payload
         self.calls = calls
 
-    def __enter__(self) -> "_Client":
+    def __enter__(self) -> _Client:
         return self
 
     def __exit__(self, *args: object) -> None:
